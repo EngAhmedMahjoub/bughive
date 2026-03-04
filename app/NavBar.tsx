@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
 import { GiAlienBug } from "react-icons/gi";
 import classNames from "classnames";
 
