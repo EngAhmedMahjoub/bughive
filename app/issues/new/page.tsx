@@ -33,10 +33,12 @@ const NewIssuePage = () => {
   const [isSubmitting, setSubmitting] = useState(false);
 
   const onSubmit = handleSubmit(async (data) => {
+    setSubmitting(true);
+    setError("");
+
     try {
       await axios.post("/api/issues", data);
       router.push("/issues");
-      setSubmitting(true);
     } catch (error) {
       setError("An unxpected error occured.");
       setSubmitting(false);
