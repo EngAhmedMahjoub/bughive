@@ -1,7 +1,7 @@
 import React from "react";
 import { notFound } from "next/navigation";
 import prisma from "@/prisma/client";
-import IssueFormDynamic from "./IssueFormDynamic";
+import IssueFormDynamic from "../IssueFormDynamic";
 
 interface Props {
   params: Promise<{ id: string }>;

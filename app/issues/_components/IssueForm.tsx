@@ -35,7 +35,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
 
     try {
       if (issue) await axios.patch("/api/issues/" + issue.id, data);
-      else await axios.post("/api/issues", data);
+      else await axios.post("/api/issues/list", data);
 
       router.push("/issues");
     } catch (error) {
