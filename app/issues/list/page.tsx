@@ -21,10 +21,12 @@ const IssuesPage = async ({ searchParams }: Props) => {
   const status =
     statuses.includes(searchParams.status) ? searchParams.status : undefined;
 
-    const orderBy =
-      columns.map((column) => column.value) ?
-        { [searchParams.orderBy]: "asc".includes(searchParams.orderBy) }
-      : undefined;
+  const orderByColumn = columns.find(
+    (column) => column.value === searchParams.orderBy,
+  )?.value;
+
+  const orderBy =
+    orderByColumn ? { [orderByColumn]: "asc" as const } : undefined;
 
   const getSortHref = (orderBy: keyof Issue) => {
     const params = new URLSearchParams();
