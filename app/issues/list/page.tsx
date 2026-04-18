@@ -7,10 +7,12 @@ import { Issue, Status } from "@prisma/client";
 import { ArrowUpIcon } from "@radix-ui/react-icons";
 
 interface Props {
-  searchParams: { status: Status; orderBy: keyof Issue };
+  searchParams: Promise<{ status?: string; orderBy?: string }>;
 }
 
 const IssuesPage = async ({ searchParams }: Props) => {
+  const params = await searchParams;
+
   const columns: { label: string; value: keyof Issue; className?: string }[] = [
     { label: "Issue", value: "title" },
     { label: "Status", value: "status", className: "hidden md:table-cell" },
@@ -19,10 +21,12 @@ const IssuesPage = async ({ searchParams }: Props) => {
   
   const statuses = Object.values(Status);
   const status =
-    statuses.includes(searchParams.status) ? searchParams.status : undefined;
+    params.status && statuses.includes(params.status as Status) ?
+      (params.status as Status)
+    : undefined;
 
   const orderByColumn = columns.find(
-    (column) => column.value === searchParams.orderBy,
+    (column) => column.value === params.orderBy,
   )?.value;
 
   const orderBy =
@@ -53,7 +57,7 @@ const IssuesPage = async ({ searchParams }: Props) => {
                 <NextLink href={getSortHref(column.value)}>
                   {column.label}
                 </NextLink>
-                {column.value === searchParams.orderBy && (
+                {column.value === orderByColumn && (
                   <ArrowUpIcon className="inline" />
                 )}
               </Table.ColumnHeaderCell>
