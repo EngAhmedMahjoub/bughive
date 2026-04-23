@@ -19,6 +19,7 @@ const IssueStatusFilter = () => {
 
   return (
     <Select.Root
+      defaultValue={searchParams.get("status") || ""}
       value={currentStatus}
       onValueChange={(status) => {
         const query = status !== "ALL" ? `?status=${status}` : "";
