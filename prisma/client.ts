@@ -9,11 +9,7 @@ declare global {
 }
 
 // Create a single instance if one doesn't already exist
-export const prisma =
-  global.prisma ||
-  new PrismaClient({
-    log: ["query"], // Optional: Log all queries to the console
-  });
+export const prisma = global.prisma || new PrismaClient();
 
 // In production, ensure the global instance is used
 if (process.env.NODE_ENV !== "production") {
