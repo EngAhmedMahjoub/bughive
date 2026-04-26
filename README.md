@@ -1,34 +1,92 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Bughive
 
-## Getting Started
+Bughive is a Next.js issue tracker backed by Prisma and MySQL, with Google login handled through NextAuth.
 
-First, run the development server:
+## Local Development
+
+Install dependencies and start the development server:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Required local environment variables are listed in `.env.example`:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+DATABASE_URL=""
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET=""
+GOOGLE_CLIENT_ID=""
+GOOGLE_CLIENT_SECRET=""
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Production Database
 
-## Learn More
+This project is already configured for MySQL in `prisma/schema.prisma`. For production, use a managed MySQL database and set the full connection string in `DATABASE_URL`.
 
-To learn more about Next.js, take a look at the following resources:
+Example Aiven connection string:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+mysql://avnadmin:YOUR_PASSWORD@bughive-db-bughive.c.aivencloud.com:24851/defaultdb?ssl-mode=REQUIRED
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Keep the `?ssl-mode=REQUIRED` portion intact when using Aiven.
 
-## Deploy on Vercel
+## Deploying On Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Before the first production deployment, add these environment variables in the Vercel project settings:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```bash
+DATABASE_URL="mysql://avnadmin:YOUR_PASSWORD@bughive-db-bughive.c.aivencloud.com:24851/defaultdb?ssl-mode=REQUIRED"
+NEXTAUTH_URL="https://your-production-domain.vercel.app"
+NEXTAUTH_SECRET="your-random-secret"
+GOOGLE_CLIENT_ID="your-google-client-id"
+GOOGLE_CLIENT_SECRET="your-google-client-secret"
+```
+
+Use a strong random value for `NEXTAUTH_SECRET`. If you use a custom domain, set `NEXTAUTH_URL` to that domain instead of the default Vercel URL.
+
+### Apply Prisma Migrations
+
+This repository already includes Prisma migrations under `prisma/migrations`, so production schema changes should be applied with `prisma migrate deploy`.
+
+Run this against the production database before the first live deployment:
+
+```bash
+DATABASE_URL="mysql://avnadmin:YOUR_PASSWORD@bughive-db-bughive.c.aivencloud.com:24851/defaultdb?ssl-mode=REQUIRED" npm run prisma:migrate:deploy
+```
+
+Do not use `prisma db push` for production in this project.
+
+### Suggested Vercel Build Command
+
+Set the Vercel build command to:
+
+```bash
+npm run vercel-build
+```
+
+That command runs:
+
+1. `prisma generate`
+2. `prisma migrate deploy`
+3. `next build`
+
+If you prefer to keep migrations outside the Vercel build step, run `npm run prisma:migrate:deploy` manually from a trusted machine or CI pipeline before deploying, and leave the build command as the default `next build`.
+
+## Useful Scripts
+
+```bash
+npm run prisma:generate
+npm run prisma:migrate:deploy
+npm run vercel-build
+```
+
+## Post-Deploy Smoke Check
+
+After deployment:
+
+1. Open the app.
+2. Create an issue and confirm it appears in the issue list.
+3. Test Google sign-in and confirm authentication works.
