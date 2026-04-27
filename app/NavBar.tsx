@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { GiAlienBug } from "react-icons/gi";
 import classNames from "classnames";
 import { useSession } from "next-auth/react";
 import {
@@ -21,8 +21,17 @@ const NavBar = () => {
       <Container>
         <Flex justify="between">
           <Flex align="center" gap="3">
-            <Link href="/">
-              <GiAlienBug />
+            <Link
+              href="/"
+              className="inline-flex items-center justify-center rounded-md border border-zinc-500 bg-zinc-100 p-1 shadow-sm"
+              aria-label="Go to dashboard"
+            >
+              <Image
+                src="/favicon.svg"
+                alt="BugHive Logo"
+                width={32}
+                height={32}
+              />
             </Link>
             <NavLinks />
           </Flex>
