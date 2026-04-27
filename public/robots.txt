@@ -1,0 +1,19 @@
+# Bug Hive SEO Robots File
+# Allow all search engine crawlers
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /auth/
+Disallow: /*.json$
+Crawl-delay: 1
+
+# Specific crawler directives
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Sitemap location
+Sitemap: https://localhost:3000/sitemap.xml

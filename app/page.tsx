@@ -23,6 +23,29 @@ export default async function Home() {
 }
 
 export const metadata: Metadata = {
-  title: "Bug Hive - Dashboard",
-  description: "View a summary of project issues",
+  title: "Dashboard",
+  description:
+    "Overview and summary of all project issues, including open, in-progress, and closed tickets",
+  openGraph: {
+    title: "Bug Hive - Dashboard",
+    description:
+      "Overview and summary of all project issues, including open, in-progress, and closed tickets",
+    type: "website",
+    url: "/",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Bug Hive Dashboard",
+      },
+    ],
+  },
+  twitter: {
+    title: "Bug Hive - Dashboard",
+    description:
+      "Overview and summary of all project issues, including open, in-progress, and closed tickets",
+    card: "summary_large_image",
+    images: ["/og-image.png"],
+  },
 };

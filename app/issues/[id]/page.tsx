@@ -50,9 +50,48 @@ const IssueDetailPage = async ({ params }: Props) => {
 export async function generateMetadata({ params }: Props) {
   const issue = await fetchUser(parseInt((await params).id));
 
+  if (!issue) {
+    return {
+      title: "Issue Not Found",
+    };
+  }
+
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const issueUrl = `${baseUrl}/issues/${issue.id}`;
+  const statusColor =
+    issue.status === "OPEN" ? "🔴"
+    : issue.status === "IN_PROGRESS" ? "🟡"
+    : "🟢";
+  const description = `${statusColor} ${issue.status} - ${issue.description || "No description provided"}`;
+
   return {
-    title: issue?.title,
-    description: "Details of issue " + issue?.id,
+    title: issue.title,
+    description: description.substring(0, 160),
+    canonical: issueUrl,
+    openGraph: {
+      title: `Issue: ${issue.title}`,
+      description: description.substring(0, 160),
+      type: "article",
+      url: issueUrl,
+      publishedTime: issue.created?.toISOString(),
+      modifiedTime: issue.updatedAt?.toISOString(),
+      authors: ["Bug Hive"],
+      tags: [issue.status, "issue", "bug-tracking"],
+      images: [
+        {
+          url: "/og-image.png",
+          width: 1200,
+          height: 630,
+          alt: `Issue: ${issue.title}`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Issue: ${issue.title}`,
+      description: description.substring(0, 160),
+      images: ["/og-image.png"],
+    },
   };
 }
 
