@@ -8,6 +8,7 @@ import { getServerSession } from "next-auth";
 import authOptions from "@/app/api/auth/authOptions";
 import AssigneeSelect from "./AssigneeSelect";
 import { cache } from "react";
+import { Metadata } from "next";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -47,8 +48,14 @@ const IssueDetailPage = async ({ params }: Props) => {
   );
 };
 
-export async function generateMetadata({ params }: Props) {
-  const issue = await fetchUser(parseInt((await params).id));
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  const issueId = parseInt(id, 10);
+  if (Number.isNaN(issueId)) {
+    return { title: "Issue Not Found" };
+  }
+
+  const issue = await fetchUser(issueId);
 
   if (!issue) {
     return {
@@ -56,8 +63,7 @@ export async function generateMetadata({ params }: Props) {
     };
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  const issueUrl = `${baseUrl}/issues/${issue.id}`;
+  const issueUrl = `/issues/${issue.id}`;
   const statusColor =
     issue.status === "OPEN" ? "🔴"
     : issue.status === "IN_PROGRESS" ? "🟡"
@@ -67,7 +73,7 @@ export async function generateMetadata({ params }: Props) {
   return {
     title: issue.title,
     description: description.substring(0, 160),
-    canonical: issueUrl,
+    alternates: { canonical: issueUrl },
     openGraph: {
       title: `Issue: ${issue.title}`,
       description: description.substring(0, 160),
@@ -77,20 +83,11 @@ export async function generateMetadata({ params }: Props) {
       modifiedTime: issue.updatedAt?.toISOString(),
       authors: ["Bug Hive"],
       tags: [issue.status, "issue", "bug-tracking"],
-      images: [
-        {
-          url: "/og-image.png",
-          width: 1200,
-          height: 630,
-          alt: `Issue: ${issue.title}`,
-        },
-      ],
     },
     twitter: {
       card: "summary_large_image",
       title: `Issue: ${issue.title}`,
       description: description.substring(0, 160),
-      images: ["/og-image.png"],
     },
   };
 }

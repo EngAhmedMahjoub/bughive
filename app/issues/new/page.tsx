@@ -9,14 +9,6 @@ export const metadata: Metadata = {
     description: "Create a new issue or bug report in Bug Hive",
     type: "website",
     url: "/issues/new",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Create Issue",
-      },
-    ],
   },
 };
 

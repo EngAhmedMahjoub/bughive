@@ -20,21 +20,12 @@ export const metadata: Metadata = {
       "Browse and manage all project issues with advanced filtering and sorting capabilities",
     type: "website",
     url: "/issues/list",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Bug Hive Issues",
-      },
-    ],
   },
   twitter: {
     title: "Bug Hive - Issues",
     description:
       "Browse and manage all project issues with advanced filtering and sorting capabilities",
     card: "summary_large_image",
-    images: ["/og-image.png"],
   },
 };
 

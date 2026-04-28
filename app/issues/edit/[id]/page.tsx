@@ -10,8 +10,13 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
+  const issueId = parseInt(id, 10);
+  if (Number.isNaN(issueId)) {
+    return { title: "Issue Not Found" };
+  }
+
   const issue = await prisma?.issue.findUnique({
-    where: { id: parseInt(id, 10) },
+    where: { id: issueId },
   });
 
   if (!issue) {
@@ -28,14 +33,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: `Edit issue: ${issue.title}`,
       type: "website",
       url: `/issues/edit/${issue.id}`,
-      images: [
-        {
-          url: "/og-image.png",
-          width: 1200,
-          height: 630,
-          alt: `Edit: ${issue.title}`,
-        },
-      ],
     },
   };
 }
