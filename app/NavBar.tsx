@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { GiAlienBug } from "react-icons/gi";
 import classNames from "classnames";
 import { useSession } from "next-auth/react";
 import {
@@ -22,7 +22,7 @@ const NavBar = () => {
         <Flex justify="between">
           <Flex align="center" gap="3">
             <Link href="/">
-              <GiAlienBug />
+              <Image src="/icon.svg" alt="BugHive" width={32} height={32} />
             </Link>
             <NavLinks />
           </Flex>
