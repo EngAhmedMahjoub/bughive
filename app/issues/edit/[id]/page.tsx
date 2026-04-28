@@ -2,12 +2,12 @@ import React from "react";
 import { notFound } from "next/navigation";
 import prisma from "@/prisma/client";
 import IssueFormDynamic from "../IssueFormDynamic";
-import { Metadata } from "next";
 
 interface Props {
   params: Promise<{ id: string }>;
 }
 
+<<<<<<< HEAD
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const issueId = parseInt(id, 10);
@@ -37,6 +37,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+=======
+>>>>>>> parent of a39f8a9 (implement seo and og metadata)
 const EditIssuePage = async ({ params }: Props) => {
   const { id } = await params;
 

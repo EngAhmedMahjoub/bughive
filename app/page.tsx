@@ -23,6 +23,7 @@ export default async function Home() {
 }
 
 export const metadata: Metadata = {
+<<<<<<< HEAD
   title: "Dashboard",
   description:
     "Overview and summary of all project issues, including open, in-progress, and closed tickets",
@@ -39,4 +40,8 @@ export const metadata: Metadata = {
       "Overview and summary of all project issues, including open, in-progress, and closed tickets",
     card: "summary_large_image",
   },
+=======
+  title: "Bug Hive - Dashboard",
+  description: "View a summary of project issues",
+>>>>>>> parent of a39f8a9 (implement seo and og metadata)
 };

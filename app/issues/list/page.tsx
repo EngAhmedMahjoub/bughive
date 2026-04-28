@@ -10,6 +10,7 @@ interface Props {
   searchParams: Promise<IssueQuery>;
 }
 
+<<<<<<< HEAD
 export const metadata: Metadata = {
   title: "Issues",
   description:
@@ -29,6 +30,8 @@ export const metadata: Metadata = {
   },
 };
 
+=======
+>>>>>>> parent of a39f8a9 (implement seo and og metadata)
 const IssuesPage = async ({ searchParams }: Props) => {
   const params = await searchParams;
 
@@ -85,5 +88,10 @@ const IssuesPage = async ({ searchParams }: Props) => {
 };
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Bug Hive - Issue List",
+  description: "View all project issues",
+};
 
 export default IssuesPage;

@@ -57,6 +57,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const issue = await fetchUser(issueId);
 
+<<<<<<< HEAD
   if (!issue) {
     return {
       title: "Issue Not Found",
@@ -89,6 +90,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `Issue: ${issue.title}`,
       description: description.substring(0, 160),
     },
+=======
+  return {
+    title: issue?.title,
+    description: "Details of issue " + issue?.id,
+>>>>>>> parent of a39f8a9 (implement seo and og metadata)
   };
 }
 
