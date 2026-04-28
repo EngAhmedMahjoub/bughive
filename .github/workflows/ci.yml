@@ -31,5 +31,5 @@ jobs:
         run: npm run build
         env:
           NEXT_PUBLIC_APP_URL: http://localhost:3000
-          # DATABASE_URL must be set for Prisma client (mysql provider, no actual connection made during build)
-          DATABASE_URL: ${{ secrets.DATABASE_URL || 'mysql://ci_user:ci_pass@localhost:3306/ci_db' }}
+          # DATABASE_URL is required for Prisma Client initialization; database connectivity is not needed during build
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
