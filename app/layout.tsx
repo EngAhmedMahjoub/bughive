@@ -14,8 +14,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "BugHive",
-  description: "Bug tracking made simple",
+  title: "Bughive",
+  description: "Dealing with bug issues is easier using bughive!",
   icons: {
     icon: "/icon.svg",
   },
