@@ -14,8 +14,34 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Bughive",
-  description: "Dealing with bug issues is easier using bughive!",
+  metadataBase: new URL("https://bughive-seven.vercel.app"),
+  title: {
+    default: "Bughive – Simple Issue & Bug Tracking",
+    template: "%s | Bughive",
+  },
+  description:
+    "Bughive is a lightweight issue and bug tracker that helps teams report, assign, and resolve software issues faster.",
+  applicationName: "Bughive",
+  keywords: [
+    "bug tracker",
+    "issue tracker",
+    "bug tracking software",
+    "issue management",
+    "project management",
+    "software bugs",
+    "Bughive",
+  ],
+  authors: [{ name: "Bughive" }],
+  creator: "Bughive",
+  publisher: "Bughive",
+  alternates: {
+    canonical: "/",
+  },
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   icons: {
     icon: "/icon.svg",
   },
