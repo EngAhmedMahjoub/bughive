@@ -19,7 +19,14 @@ NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET=""
 GOOGLE_CLIENT_ID=""
 GOOGLE_CLIENT_SECRET=""
+NEXT_PUBLIC_SITE_URL="http://localhost:3000"
 ```
+
+`NEXT_PUBLIC_SITE_URL` is the canonical site URL (no trailing slash) used by SEO
+metadata, JSON-LD structured data, `sitemap.xml`, and `robots.txt`. In
+development it can be left as `http://localhost:3000`. On Vercel preview
+deployments it automatically falls back to `VERCEL_URL`, so only the
+production environment must set it explicitly.
 
 ## Production Database
 
@@ -43,6 +50,7 @@ NEXTAUTH_URL="https://your-production-domain.vercel.app"
 NEXTAUTH_SECRET="your-random-secret"
 GOOGLE_CLIENT_ID="your-google-client-id"
 GOOGLE_CLIENT_SECRET="your-google-client-secret"
+NEXT_PUBLIC_SITE_URL="https://your-production-domain.vercel.app"
 ```
 
 Use a strong random value for `NEXTAUTH_SECRET`. If you use a custom domain, set `NEXTAUTH_URL` to that domain instead of the default Vercel URL.
