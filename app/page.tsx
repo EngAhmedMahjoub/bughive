@@ -23,6 +23,15 @@ export default async function Home() {
 }
 
 export const metadata: Metadata = {
-  title: "Bug Hive - Dashboard",
-  description: "View a summary of project issues",
+  title: { absolute: "Dashboard | Bughive" },
+  description:
+    "Bughive dashboard – view a summary of open, in-progress, and closed project issues at a glance.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: "Dashboard | Bughive",
+    description:
+      "View a summary of open, in-progress, and closed project issues at a glance.",
+    url: "/",
+    type: "website",
+  },
 };
