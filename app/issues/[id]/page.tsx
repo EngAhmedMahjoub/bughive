@@ -30,8 +30,35 @@ const IssueDetailPage = async ({ params }: Props) => {
 
   if (!issue) notFound();
 
+  const siteUrl = "https://bughive-seven.vercel.app";
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: issue.title,
+    description:
+      issue.description.length > 200 ?
+        `${issue.description.slice(0, 197).trim()}...`
+      : issue.description,
+    datePublished: issue.created.toISOString(),
+    dateModified: issue.updatedAt.toISOString(),
+    url: `${siteUrl}/issues/${issue.id}`,
+    mainEntityOfPage: `${siteUrl}/issues/${issue.id}`,
+    publisher: {
+      "@type": "Organization",
+      name: "Bughive",
+      logo: {
+        "@type": "ImageObject",
+        url: `${siteUrl}/icon.svg`,
+      },
+    },
+  };
+
   return (
     <Grid columns={{ initial: "1", sm: "5" }} gap="5">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Box className="md:col-span-4">
         <IssueDetails issue={issue} />
       </Box>
