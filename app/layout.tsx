@@ -7,6 +7,7 @@ import NavBar from "./NavBar";
 import { Container, Theme } from "@radix-ui/themes";
 import AuthProvider from "./auth/Provider";
 import QueryClientProvider from "./QueryClientProvider";
+import { getSiteUrl } from "./lib/siteUrl";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -14,7 +15,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://bughive-seven.vercel.app"),
+  metadataBase: new URL(getSiteUrl()),
   title: {
     default: "Bughive – Simple Issue & Bug Tracking",
     template: "%s | Bughive",
@@ -74,7 +75,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const siteUrl = "https://bughive-seven.vercel.app";
+  const siteUrl = getSiteUrl();
   const jsonLd = [
     {
       "@context": "https://schema.org",

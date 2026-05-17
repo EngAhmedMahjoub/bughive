@@ -9,6 +9,7 @@ import authOptions from "@/app/api/auth/authOptions";
 import AssigneeSelect from "./AssigneeSelect";
 import { cache } from "react";
 import { Metadata } from "next";
+import { getSiteUrl } from "@/app/lib/siteUrl";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -30,7 +31,7 @@ const IssueDetailPage = async ({ params }: Props) => {
 
   if (!issue) notFound();
 
-  const siteUrl = "https://bughive-seven.vercel.app";
+  const siteUrl = getSiteUrl();
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",

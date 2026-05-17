@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
 import prisma from "@/prisma/client";
+import { getSiteUrl } from "./lib/siteUrl";
 
-const SITE_URL = "https://bughive-seven.vercel.app";
+const SITE_URL = getSiteUrl();
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
