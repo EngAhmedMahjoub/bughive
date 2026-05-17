@@ -74,9 +74,32 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const siteUrl = "https://bughive-seven.vercel.app";
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name: "Bughive",
+      url: siteUrl,
+      logo: `${siteUrl}/icon.svg`,
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "Bughive",
+      url: siteUrl,
+      description:
+        "Bughive is a lightweight issue and bug tracker that helps teams report, assign, and resolve software issues faster.",
+    },
+  ];
+
   return (
     <html lang="en">
       <body className={inter.variable}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <QueryClientProvider>
           <AuthProvider>
             <Theme accentColor="lime" radius="small">
