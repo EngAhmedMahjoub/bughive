@@ -1,5 +1,5 @@
 import prisma from "@/prisma/client";
-import { Box, Flex, Grid } from "@radix-ui/themes";
+import { Box, Flex, Grid, Heading, Separator } from "@radix-ui/themes";
 import { notFound } from "next/navigation";
 import EditIssueButton from "./EditIssueButton";
 import IssueDetails from "./IssueDetails";
@@ -7,6 +7,9 @@ import DeleteIssueButton from "./DeleteIssueButton";
 import { getServerSession } from "next-auth";
 import authOptions from "@/app/api/auth/authOptions";
 import AssigneeSelect from "./AssigneeSelect";
+import StatusSelect from "./StatusSelect";
+import CommentList from "./CommentList";
+import CommentForm from "./CommentForm";
 import { cache } from "react";
 import { Metadata } from "next";
 import { getSiteUrl } from "@/app/lib/siteUrl";
@@ -62,10 +65,19 @@ const IssueDetailPage = async ({ params }: Props) => {
       />
       <Box className="md:col-span-4">
         <IssueDetails issue={issue} />
+        <Separator size="4" my="5" />
+        <Heading as="h2" size="4" mb="3">
+          Comments
+        </Heading>
+        <Flex direction="column" gap="4">
+          <CommentList issueId={issue.id} />
+          {session && <CommentForm issueId={issue.id} />}
+        </Flex>
       </Box>
       {session && (
         <Box>
           <Flex direction="column" gap="4">
+            <StatusSelect key={issue.status} issue={issue} />
             <AssigneeSelect issue={issue} />
             <EditIssueButton issueId={issue.id} />
             <DeleteIssueButton issueId={issue.id} />

@@ -19,11 +19,15 @@ const IssueStatusFilter = () => {
 
   return (
     <Select.Root
-      defaultValue={searchParams.get("status") || ""}
       value={currentStatus}
       onValueChange={(status) => {
-        const query = status !== "ALL" ? `?status=${status}` : "";
-        router.push("/issues/list" + query);
+        const params = new URLSearchParams(searchParams);
+        if (status === "ALL") params.delete("status");
+        else params.set("status", status);
+        // Reset to first page when filter changes.
+        params.delete("page");
+        const qs = params.toString();
+        router.push("/issues/list" + (qs ? "?" + qs : ""));
       }}
     >
       <Select.Trigger placeholder="Filter by status..." />

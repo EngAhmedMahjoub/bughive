@@ -2,7 +2,8 @@ import Pagination from "@/app/components/Pagination";
 import prisma from "@/prisma/client";
 import { Issue, Status } from "@prisma/client";
 import IssueActions from "./IssueActions";
-import IssueTable, { columnNames, IssueQuery } from "./IssueTable";
+import IssueTable, { columnNames, IssueQuery, SortOrder } from "./IssueTable";
+import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from "./pageSizes";
 import { Flex, Heading } from "@radix-ui/themes";
 import { Metadata } from "next";
 
@@ -18,25 +19,45 @@ const IssuesPage = async ({ searchParams }: Props) => {
     params.status && statuses.includes(params.status as Status) ?
       (params.status as Status)
     : undefined;
-  const where = { status };
 
-  const orderByColumn = (await searchParams).orderBy;
-  const orderBy =
-    orderByColumn && columnNames.includes(orderByColumn as any) ?
-      { [orderByColumn]: "asc" as const }
+  // Assignee filter: undefined => no filter; null => unassigned; string => userId
+  let assignedToUserId: string | null | undefined = undefined;
+  if (params.assignee === "unassigned") assignedToUserId = null;
+  else if (params.assignee && params.assignee !== "all")
+    assignedToUserId = params.assignee;
+
+  const where = { status, assignedToUserId };
+
+  const orderByColumn =
+    params.orderBy && columnNames.includes(params.orderBy as any) ?
+      (params.orderBy as keyof Issue)
     : undefined;
+  const order: SortOrder = params.order === "desc" ? "desc" : "asc";
+  const orderBy = orderByColumn ? { [orderByColumn]: order } : undefined;
 
-  const getSortHref = (orderBy: keyof Issue) => {
-    const params = new URLSearchParams();
+  const page = parseInt(params.page) || 1;
+  const requestedSize = parseInt(params.pageSize);
+  const pageSize =
+    (PAGE_SIZES as readonly number[]).includes(requestedSize) ?
+      requestedSize
+    : DEFAULT_PAGE_SIZE;
 
-    if (status) params.set("status", status);
-    params.set("orderBy", orderBy);
+  const getSortHref = (column: keyof Issue) => {
+    const next = new URLSearchParams();
 
-    return `?${params.toString()}`;
+    if (status) next.set("status", status);
+    if (params.assignee && params.assignee !== "all")
+      next.set("assignee", params.assignee);
+    if (pageSize !== DEFAULT_PAGE_SIZE)
+      next.set("pageSize", pageSize.toString());
+    next.set("orderBy", column);
+    // Flip order if clicking the active column; otherwise default to asc.
+    const nextOrder: SortOrder =
+      orderByColumn === column && order === "asc" ? "desc" : "asc";
+    if (nextOrder === "desc") next.set("order", "desc");
+
+    return `?${next.toString()}`;
   };
-
-  const page = parseInt((await searchParams).page) || 1;
-  const pageSize = 10;
 
   const issues = await prisma?.issue.findMany({
     where,
@@ -58,6 +79,7 @@ const IssuesPage = async ({ searchParams }: Props) => {
         issues={issues}
         getSortHref={getSortHref}
         orderByColumn={orderByColumn}
+        order={order}
       />
       <Pagination
         pageSize={pageSize}
@@ -66,7 +88,7 @@ const IssuesPage = async ({ searchParams }: Props) => {
       />
     </Flex>
   );
-};
+};;
 
 export const dynamic = "force-dynamic";
 

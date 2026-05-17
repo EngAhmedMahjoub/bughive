@@ -20,6 +20,20 @@ model Issue {
   updatedAt        DateTime @updatedAt
   assignedToUserId String?  @db.VarChar(255)
   assignedToUser   User?    @relation(fields: [assignedToUserId], references: [id])
+  comments         Comment[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  body      String   @db.Text
+  issueId   Int
+  issue     Issue    @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@index([issueId])
+  @@index([userId])
 }
 
 enum Status {
@@ -70,6 +84,7 @@ model User {
   accounts       Account[]
   sessions       Session[]
   assignedIssues Issue[]
+  comments       Comment[]
 }
 
 model VerificationToken {
