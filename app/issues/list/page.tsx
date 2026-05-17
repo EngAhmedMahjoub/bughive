@@ -3,7 +3,7 @@ import prisma from "@/prisma/client";
 import { Issue, Status } from "@prisma/client";
 import IssueActions from "./IssueActions";
 import IssueTable, { columnNames, IssueQuery } from "./IssueTable";
-import { Flex } from "@radix-ui/themes";
+import { Flex, Heading } from "@radix-ui/themes";
 import { Metadata } from "next";
 
 interface Props {
@@ -49,6 +49,9 @@ const IssuesPage = async ({ searchParams }: Props) => {
 
   return (
     <Flex direction="column" gap="3">
+      <Heading as="h1" size="6">
+        Issues
+      </Heading>
       <IssueActions />
       <IssueTable
         searchParams={searchParams}
