@@ -68,8 +68,17 @@ const IssuesPage = async ({ searchParams }: Props) => {
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Bug Hive - Issue List",
-  description: "View all project issues",
+  title: "All Issues",
+  description:
+    "Browse all reported bugs and project issues on Bughive. Filter by status (open, in-progress, closed) and sort to find what you need.",
+  alternates: { canonical: "/issues/list" },
+  openGraph: {
+    title: "All Issues | Bughive",
+    description:
+      "Browse all reported bugs and project issues on Bughive.",
+    url: "/issues/list",
+    type: "website",
+  },
 };
 
 export default IssuesPage;
