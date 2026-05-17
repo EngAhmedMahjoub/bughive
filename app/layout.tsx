@@ -45,6 +45,32 @@ export const metadata: Metadata = {
   icons: {
     icon: "/icon.svg",
   },
+  openGraph: {
+    type: "website",
+    siteName: "Bughive",
+    title: "Bughive – Simple Issue & Bug Tracking",
+    description:
+      "Bughive is a lightweight issue and bug tracker that helps teams report, assign, and resolve software issues faster.",
+    url: "/",
+    locale: "en_US",
+    // TODO: replace with a 1200x630 PNG at /public/og-image.png for best results
+    // on Slack, Discord, Facebook, LinkedIn, etc.
+    images: [
+      {
+        url: "/icon.svg",
+        width: 512,
+        height: 512,
+        alt: "Bughive logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Bughive – Simple Issue & Bug Tracking",
+    description:
+      "Bughive is a lightweight issue and bug tracker that helps teams report, assign, and resolve software issues faster.",
+    images: ["/icon.svg"],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
