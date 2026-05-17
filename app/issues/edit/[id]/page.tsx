@@ -20,15 +20,13 @@ const EditIssuePage = async ({ params }: Props) => {
   return <IssueFormDynamic issue={issue} />;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { id } = await params;
-  const issue = await prisma?.issue.findUnique({
-    where: { id: parseInt(id, 10) },
-  });
-  return {
-    title: issue ? `Bughive - Edit: ${issue.title}` : "Bughive - Edit Issue",
-    description: "Edit an existing project issue",
-  };
-}
+export const metadata: Metadata = {
+  title: "Edit Issue",
+  description: "Edit an existing project issue on Bughive.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default EditIssuePage;
