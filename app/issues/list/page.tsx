@@ -2,7 +2,7 @@ import Pagination from "@/app/components/Pagination";
 import prisma from "@/prisma/client";
 import { Issue, Status } from "@prisma/client";
 import IssueActions from "./IssueActions";
-import IssueTable, { columnNames, IssueQuery } from "./IssueTable";
+import IssueTable, { columnNames, IssueQuery, SortOrder } from "./IssueTable";
 import { Flex, Heading } from "@radix-ui/themes";
 import { Metadata } from "next";
 
@@ -20,23 +20,28 @@ const IssuesPage = async ({ searchParams }: Props) => {
     : undefined;
   const where = { status };
 
-  const orderByColumn = (await searchParams).orderBy;
-  const orderBy =
-    orderByColumn && columnNames.includes(orderByColumn as any) ?
-      { [orderByColumn]: "asc" as const }
+  const orderByColumn =
+    params.orderBy && columnNames.includes(params.orderBy as any) ?
+      (params.orderBy as keyof Issue)
     : undefined;
+  const order: SortOrder = params.order === "desc" ? "desc" : "asc";
+  const orderBy = orderByColumn ? { [orderByColumn]: order } : undefined;
 
-  const getSortHref = (orderBy: keyof Issue) => {
-    const params = new URLSearchParams();
-
-    if (status) params.set("status", status);
-    params.set("orderBy", orderBy);
-
-    return `?${params.toString()}`;
-  };
-
-  const page = parseInt((await searchParams).page) || 1;
+  const page = parseInt(params.page) || 1;
   const pageSize = 10;
+
+  const getSortHref = (column: keyof Issue) => {
+    const next = new URLSearchParams();
+
+    if (status) next.set("status", status);
+    next.set("orderBy", column);
+    // Flip order if clicking the active column; otherwise default to asc.
+    const nextOrder: SortOrder =
+      orderByColumn === column && order === "asc" ? "desc" : "asc";
+    if (nextOrder === "desc") next.set("order", "desc");
+
+    return `?${next.toString()}`;
+  };
 
   const issues = await prisma?.issue.findMany({
     where,
@@ -58,6 +63,7 @@ const IssuesPage = async ({ searchParams }: Props) => {
         issues={issues}
         getSortHref={getSortHref}
         orderByColumn={orderByColumn}
+        order={order}
       />
       <Pagination
         pageSize={pageSize}
