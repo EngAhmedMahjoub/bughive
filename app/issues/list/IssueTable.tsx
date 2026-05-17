@@ -11,6 +11,7 @@ export interface IssueQuery {
   orderBy: keyof Issue;
   order: SortOrder;
   page: string;
+  pageSize: string;
 }
 
 interface Props {

@@ -3,6 +3,7 @@ import prisma from "@/prisma/client";
 import { Issue, Status } from "@prisma/client";
 import IssueActions from "./IssueActions";
 import IssueTable, { columnNames, IssueQuery, SortOrder } from "./IssueTable";
+import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from "./pageSizes";
 import { Flex, Heading } from "@radix-ui/themes";
 import { Metadata } from "next";
 
@@ -28,12 +29,18 @@ const IssuesPage = async ({ searchParams }: Props) => {
   const orderBy = orderByColumn ? { [orderByColumn]: order } : undefined;
 
   const page = parseInt(params.page) || 1;
-  const pageSize = 10;
+  const requestedSize = parseInt(params.pageSize);
+  const pageSize =
+    (PAGE_SIZES as readonly number[]).includes(requestedSize) ?
+      requestedSize
+    : DEFAULT_PAGE_SIZE;
 
   const getSortHref = (column: keyof Issue) => {
     const next = new URLSearchParams();
 
     if (status) next.set("status", status);
+    if (pageSize !== DEFAULT_PAGE_SIZE)
+      next.set("pageSize", pageSize.toString());
     next.set("orderBy", column);
     // Flip order if clicking the active column; otherwise default to asc.
     const nextOrder: SortOrder =
