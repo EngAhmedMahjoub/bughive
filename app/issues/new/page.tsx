@@ -8,6 +8,11 @@ const NewIssuePage = () => {
 export default NewIssuePage;
 
 export const metadata: Metadata = {
-  title: "Bughive - New Issue",
-  description: "Create a new project issue",
+  title: "New Issue",
+  description: "Create a new bug report or project issue on Bughive.",
+  alternates: { canonical: "/issues/new" },
+  robots: {
+    index: false,
+    follow: true,
+  },
 };
