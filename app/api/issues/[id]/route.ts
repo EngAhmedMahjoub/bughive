@@ -34,13 +34,20 @@ export async function PATCH(
   if (!issue)
     return NextResponse.json({ error: "Invalid issue" }, { status: 404 });
 
+  // Auto-transition: when an issue is assigned to a user and is currently OPEN,
+  // and the caller didn't explicitly set a status, move it to IN_PROGRESS.
+  const autoStatus =
+    assignedToUserId && issue.status === "OPEN" && status === undefined ?
+      "IN_PROGRESS"
+    : undefined;
+
   const updatedIssue = await prisma?.issue.update({
     where: { id: issue.id },
     data: {
       title,
       description,
       assignedToUserId,
-      status,
+      status: status ?? autoStatus,
     },
   });
 
