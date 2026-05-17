@@ -12,6 +12,7 @@ export interface IssueQuery {
   order: SortOrder;
   page: string;
   pageSize: string;
+  assignee: string;
 }
 
 interface Props {

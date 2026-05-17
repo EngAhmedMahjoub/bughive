@@ -19,7 +19,14 @@ const IssuesPage = async ({ searchParams }: Props) => {
     params.status && statuses.includes(params.status as Status) ?
       (params.status as Status)
     : undefined;
-  const where = { status };
+
+  // Assignee filter: undefined => no filter; null => unassigned; string => userId
+  let assignedToUserId: string | null | undefined = undefined;
+  if (params.assignee === "unassigned") assignedToUserId = null;
+  else if (params.assignee && params.assignee !== "all")
+    assignedToUserId = params.assignee;
+
+  const where = { status, assignedToUserId };
 
   const orderByColumn =
     params.orderBy && columnNames.includes(params.orderBy as any) ?
@@ -39,6 +46,8 @@ const IssuesPage = async ({ searchParams }: Props) => {
     const next = new URLSearchParams();
 
     if (status) next.set("status", status);
+    if (params.assignee && params.assignee !== "all")
+      next.set("assignee", params.assignee);
     if (pageSize !== DEFAULT_PAGE_SIZE)
       next.set("pageSize", pageSize.toString());
     next.set("orderBy", column);
@@ -79,7 +88,7 @@ const IssuesPage = async ({ searchParams }: Props) => {
       />
     </Flex>
   );
-};
+};;
 
 export const dynamic = "force-dynamic";
 
