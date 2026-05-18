@@ -1,13 +1,27 @@
+import authOptions from "@/app/api/auth/authOptions";
 import prisma from "@/prisma/client";
-import { Avatar, Card, Flex, Text } from "@radix-ui/themes";
-import ReactMarkdown from "react-markdown";
+import { Flex, Text } from "@radix-ui/themes";
+import { getServerSession } from "next-auth";
+import CommentItem from "./CommentItem";
 
 const CommentList = async ({ issueId }: { issueId: number }) => {
-  const comments = await prisma.comment.findMany({
-    where: { issueId },
-    orderBy: { createdAt: "asc" },
-    include: { user: { select: { name: true, image: true } } },
-  });
+  const [comments, session] = await Promise.all([
+    prisma.comment.findMany({
+      where: { issueId },
+      orderBy: { createdAt: "asc" },
+      include: { user: { select: { id: true, name: true, image: true } } },
+    }),
+    getServerSession(authOptions),
+  ]);
+
+  let currentUserId: string | null = null;
+  if (session?.user?.email) {
+    const me = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      select: { id: true },
+    });
+    currentUserId = me?.id ?? null;
+  }
 
   if (comments.length === 0)
     return (
@@ -19,29 +33,22 @@ const CommentList = async ({ issueId }: { issueId: number }) => {
   return (
     <Flex direction="column" gap="3">
       {comments.map((c) => (
-        <Card key={c.id}>
-          <Flex gap="3" align="start">
-            <Avatar
-              size="2"
-              radius="full"
-              src={c.user.image ?? undefined}
-              fallback={(c.user.name ?? "?").charAt(0).toUpperCase()}
-            />
-            <Flex direction="column" gap="1" style={{ flex: 1 }}>
-              <Flex gap="2" align="baseline">
-                <Text size="2" weight="bold">
-                  {c.user.name ?? "Unknown"}
-                </Text>
-                <Text size="1" color="gray">
-                  {c.createdAt.toLocaleString()}
-                </Text>
-              </Flex>
-              <div className="prose prose-sm max-w-full">
-                <ReactMarkdown>{c.body}</ReactMarkdown>
-              </div>
-            </Flex>
-          </Flex>
-        </Card>
+        <CommentItem
+          key={c.id}
+          issueId={issueId}
+          comment={{
+            id: c.id,
+            body: c.body,
+            createdAt: c.createdAt.toISOString(),
+            updatedAt: c.updatedAt.toISOString(),
+            user: {
+              id: c.user.id,
+              name: c.user.name,
+              image: c.user.image,
+            },
+          }}
+          canModify={currentUserId !== null && currentUserId === c.user.id}
+        />
       ))}
     </Flex>
   );
