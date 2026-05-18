@@ -8,6 +8,7 @@ import { Container, Theme } from "@radix-ui/themes";
 import AuthProvider from "./auth/Provider";
 import QueryClientProvider from "./QueryClientProvider";
 import { getSiteUrl } from "./lib/siteUrl";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -111,6 +112,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </Theme>
           </AuthProvider>
         </QueryClientProvider>
+        <Analytics />
       </body>
     </html>
   );
